@@ -1,0 +1,5 @@
+.venv/
+data/
+
+lightning_logs/
+__pycache__/

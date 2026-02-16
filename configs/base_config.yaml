@@ -1,0 +1,33 @@
+# Trainer configuration
+trainer:
+  accelerator: "gpu"
+  devices: 1
+  max_epochs: 10
+  precision: "16-mixed"
+  log_every_n_steps: 5
+  callbacks:
+    - class_path: src.callbacks.VisualizationCallback
+      init_args:
+        snapshot_interval: 1
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        monitor: "val_loss"
+        mode: "min"
+        save_top_k: 3
+        filename: "weather-model-{epoch:02d}-{val_loss:.4f}"
+    - class_path: pytorch_lightning.callbacks.EarlyStopping
+      init_args:
+        monitor: "val_loss"
+        patience: 2
+        mode: "min"
+
+# Model configuration (FLATTENED)
+model:
+  lr: 0.0001
+  hidden_dim: 128
+
+# Data configuration (FLATTENED)
+data:
+  data_dir: "./data"
+  batch_size: 64
+  split_date: "2021-01-01"
